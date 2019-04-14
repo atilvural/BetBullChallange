@@ -1,0 +1,39 @@
+version: '3.1'
+
+services:
+
+  postgres:
+    image: postgres
+    restart: always
+    container_name: postgres
+    hostname: postgres
+    environment:
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_USER: root
+      POSTGRES_DB: BetBull
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/SqlDump/:/docker-entrypoint-initdb.d/
+  pgadmin:
+    container_name: pgadmin
+    hostname: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: atlvural@hotmail.com
+      PGADMIN_DEFAULT_PASSWORD: 123456
+    ports:
+      - 5400:80
+    restart: always
+    depends_on:
+      - postgres
+  betbullchallange:
+    container_name: betbullchallange
+    hostname: betbullchallange
+    image: gargey/betbullchallange:latest
+    ports:
+      - 9000:9000
+    restart: always
+    depends_on:
+      - postgres
+
